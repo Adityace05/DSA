@@ -76,7 +76,7 @@ public:
         Node *temp = head;
         if (head == NULL)
             return;
-        if (head == tail != NULL)
+        if (head != NULL && tail != NULL)
         {
             delete head;
             head = tail = NULL;
@@ -95,7 +95,7 @@ public:
         Node *prev = head;
         if (head == NULL)
             return;
-        if (head == tail != NULL)
+        if (head != NULL && tail != NULL)
         {
             delete head;
             head = tail = NULL;
