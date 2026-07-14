@@ -1,11 +1,9 @@
 #include <iostream>
 #include <vector>
-#include <queue>
-#include <map>
+#include <climits>
 
 using namespace std;
-int INT_MIN = -1000000;
-int INT_MAX = 1000000;
+
 class Node
 {
 public:
@@ -27,66 +25,72 @@ public:
     int mn;
     int sz;
 
-    Info(int max, int min, int size)
+    Info(int mx, int mn, int sz)
     {
-        mx = max;
-        mn = min;
-        sz = size;
+        this->mx = mx;
+        this->mn = mn;
+        this->sz = sz;
     }
 };
+
 Node *insert(Node *root, int val)
 {
     if (root == NULL)
-    {
         return new Node(val);
-    }
 
     if (val < root->data)
-    {
         root->left = insert(root->left, val);
-    }
     else
-    {
         root->right = insert(root->right, val);
-    }
+
     return root;
 }
+
 Node *buildBST(vector<int> &arr)
 {
     Node *root = NULL;
 
     for (int val : arr)
-    {
         root = insert(root, val);
-    }
+
+    return root;
 }
 
 Info helper(Node *root)
 {
+    // Empty tree is a BST
     if (root == NULL)
-    {
         return Info(INT_MIN, INT_MAX, 0);
-    }
+
     Info left = helper(root->left);
     Info right = helper(root->right);
 
+    // Current subtree is a BST
     if (left.mx < root->data && root->data < right.mn)
     {
-        return Info(min(left.mx, root->data), max(right.mx, root->data), left.sz + right.sz + 1);
+        return Info(
+            max(root->data, right.mx), // maximum value
+            min(root->data, left.mn),  // minimum value
+            left.sz + right.sz + 1     // size
+        );
     }
+
+    // Not a BST
     return Info(INT_MAX, INT_MIN, max(left.sz, right.sz));
 }
 
-int largestBst(Node *root)
+int largestBST(Node *root)
 {
-    Info info = helper(root);
-    return info.sz;
+    return helper(root).sz;
 }
 
 int main()
 {
     vector<int> arr = {3, 2, 1, 5, 6, 4};
+
     Node *root = buildBST(arr);
+
+    cout << "Largest BST size = " << largestBST(root) << endl;
 
     return 0;
 }

@@ -143,7 +143,7 @@ void morrisInorder(Node *root)
     {
         if (curr->left == NULL)
         {
-            cout << root->data;
+            cout << curr->data;
             curr = curr->right;
         }
         else
